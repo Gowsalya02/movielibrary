@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import dao.Dao;
@@ -44,11 +45,23 @@ public class SaveMovie extends HttpServlet
 		Dao dao=new Dao();
 		try 
 		{
+			HttpSession session=req.getSession();
+			String adminmail=(String)session.getAttribute("adminmail");
+			if(adminmail!=null)
+			{
+			
 			dao.saveMovie(movie);
 			req.setAttribute("movies",dao.getAllMovies());
 			
 			RequestDispatcher dispatcher=req.getRequestDispatcher("home.jsp");
 			dispatcher.include(req, resp);
+			}
+			else
+			{
+				req.setAttribute("message", "*admin login is required  ");
+				RequestDispatcher dispatcher =req.getRequestDispatcher("adminlogin.jsp");
+				dispatcher.include(req, resp);	
+			}
 		} 
 		catch (ClassNotFoundException e) 
 		{

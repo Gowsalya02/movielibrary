@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.Dao;
 import dto.Movie;
@@ -22,12 +23,23 @@ public class EditMovie extends HttpServlet
 		int id=Integer.parseInt(req.getParameter("id"));
 		Dao dao=new Dao();
 		try {
+			HttpSession session=req.getSession();
+			String adminmail=(String)session.getAttribute("adminmail");
+			if(adminmail!=null)
+			{
+			
 			 Movie m=dao.findMovieById(id);
 			
 			req.setAttribute("movie",m);
 			RequestDispatcher dispatcher =req.getRequestDispatcher("edit.jsp");
 			dispatcher.include(req, resp);
-			
+			}
+			else 
+			{
+				req.setAttribute("message", "*admin login is required  ");
+				RequestDispatcher dispatcher =req.getRequestDispatcher("adminlogin.jsp");
+				dispatcher.include(req, resp);	
+			}
 			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block

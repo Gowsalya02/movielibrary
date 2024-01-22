@@ -79,6 +79,7 @@ background-color:rgb(144, 59, 230);
 <%}%> 
 </table>
 <br><br>
-<button><a href="savemovie.jsp">AddMovie</a></button>
+<button><a href="savemovie.jsp">AddMovie</a></button><br>
+<button><a href="logout">Logout</a></button>
 </body>
 </html>

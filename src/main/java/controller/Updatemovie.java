@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import dao.Dao;
@@ -21,6 +22,7 @@ public class Updatemovie extends HttpServlet
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
 	{
+		
 		int movieid = Integer.parseInt(req.getParameter("movieid"));
 		String moviename = req.getParameter("moviename");
 		double movieprice = Double.parseDouble(req.getParameter("movieprice"));
@@ -28,7 +30,8 @@ public class Updatemovie extends HttpServlet
 		String moviegenre = req.getParameter("moviegenre");
 		String movielanguage = req.getParameter("movielanguage");
 		Part imagepart = req.getPart("movieimage");
-
+		
+		
 		Movie movie = new Movie();
 		movie.setMovieid(movieid);
 		movie.setMoviegenre(moviegenre);
@@ -39,6 +42,7 @@ public class Updatemovie extends HttpServlet
 
 		Dao dao = new Dao();
 		try {
+			
 
 			if (imagepart.getSize() > 0) {
 				movie.setMovieimage(imagepart.getInputStream().readAllBytes());
@@ -47,7 +51,9 @@ public class Updatemovie extends HttpServlet
 				req.setAttribute("movies", dao.getAllMovies());
 				RequestDispatcher dispatcher = req.getRequestDispatcher("home.jsp");
 				dispatcher.include(req, resp);
-			} else {
+			} 
+			else 
+			{
 				Movie dbmovie = dao.findMovieById(movieid);
 				movie.setMovieimage(dbmovie.getMovieimage());
 				dao.updateMovie(movie);
@@ -56,6 +62,7 @@ public class Updatemovie extends HttpServlet
 				RequestDispatcher dispatcher = req.getRequestDispatcher("home.jsp");
 				dispatcher.include(req, resp);
 			}
+			
 
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -64,6 +71,7 @@ public class Updatemovie extends HttpServlet
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		
 	}
 	
